@@ -8,6 +8,8 @@ defmodule Gitodo.Todos do
 
   alias Gitodo.Todos.Todo
 
+  @topic inspect(__MODULE__)
+
   @doc """
   Returns the list of todos.
 
@@ -53,6 +55,7 @@ defmodule Gitodo.Todos do
     %Todo{}
     |> Todo.changeset(attrs)
     |> Repo.insert()
+    |> broadcast_change([:todo, :created])
   end
 
   @doc """
@@ -71,6 +74,7 @@ defmodule Gitodo.Todos do
     todo
     |> Todo.changeset(attrs)
     |> Repo.update()
+    |> broadcast_change([:todo, :updated])
   end
 
   @doc """
@@ -87,6 +91,7 @@ defmodule Gitodo.Todos do
   """
   def delete_todo(%Todo{} = todo) do
     Repo.delete(todo)
+    |> broadcast_change([:todo, :deleted])
   end
 
   @doc """
@@ -100,5 +105,19 @@ defmodule Gitodo.Todos do
   """
   def change_todo(%Todo{} = todo, attrs \\ %{}) do
     Todo.changeset(todo, attrs)
+  end
+
+  def subscribe do
+    Phoenix.PubSub.subscribe(Gitodo.PubSub, @topic)
+  end
+
+  defp broadcast_change({:ok, result}, event) do
+    Phoenix.PubSub.broadcast(
+      Gitodo.PubSub,
+      @topic,
+      {__MODULE__, event, result}
+    )
+
+    {:ok, result}
   end
 end
