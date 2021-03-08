@@ -12,8 +12,8 @@ type Todo struct {
 }
 
 // NewTodo create and return created row
-func (t Todo) NewTodo(description string) domain.Todo {
-	todo := domain.Todo{Description: description}
+func (t Todo) NewTodo(title string) domain.Todo {
+	todo := domain.Todo{Title: title}
 	t.Db.Create(&todo)
 	return todo
 }

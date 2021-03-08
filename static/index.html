@@ -3,6 +3,7 @@
         <title>Gitodos</title>
         <link rel="stylesheet" href="app.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
     </head>
     <body>
         <section class="todoapp">
@@ -28,7 +29,7 @@
                 <ul class="todo-list">
                 <li v-for="todo in filteredTodos"
                     class="todo"
-                    :key="todo.id"
+                    :key="todo.ID"
                     :class="{ completed: todo.completed, editing: todo == editedTodo }">
                     <div class="view">
                     <input class="toggle" type="checkbox" v-model="todo.completed">
@@ -46,7 +47,6 @@
             </section>
             <footer class="footer" v-show="todos.length" v-cloak>
                 <span class="todo-count">
-                <strong>{{ remaining }}</strong> {{ remaining | pluralize }} left
                 </span>
                 <ul class="filters">
                 <li><a href="#/all" :class="{ selected: visibility == 'all' }">All</a></li>

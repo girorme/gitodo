@@ -21,7 +21,7 @@ func init() {
 	}
 
 	database.AutoMigrate(&domain.Todo{})
-	database.Create(&domain.Todo{Description: "totest"})
+	database.Create(&domain.Todo{Title: "totest"})
 	todoRepo.Db = database
 }
 
@@ -36,7 +36,7 @@ func TestGetAllTodos(t *testing.T) {
 func TestNewTodo(t *testing.T) {
 	todo := todoRepo.NewTodo("estudar tests golang")
 
-	if todo.Description != "estudar tests golang" {
+	if todo.Title != "estudar tests golang" {
 		t.Errorf("Error inserting todo")
 	}
 }
