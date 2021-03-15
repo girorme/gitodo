@@ -1,8 +1,10 @@
 package main
 
 import (
+	"encoding/json"
 	"gitodo/domain"
 	"gitodo/repository"
+	"io/ioutil"
 	"net/http"
 
 	"github.com/gin-contrib/static"
@@ -26,10 +28,34 @@ func init() {
 func main() {
 	r := gin.Default()
 	r.Use(static.Serve("/", static.LocalFile("./static", false)))
-	r.GET("/todos", getAllTodos)
+	r.GET("/todos", getTodos)
+	r.POST("/todos", saveTodos)
 	r.Run()
 }
 
-func getAllTodos(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"data": todoRepo.GetAll()})
+func getTodos(c *gin.Context) {
+	c.JSON(http.StatusOK, todoRepo.GetAll())
+}
+
+func saveTodos(c *gin.Context) {
+	var todos domain.Todos
+
+	body, err := ioutil.ReadAll(c.Request.Body)
+
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, err)
+		return
+	}
+
+	if err := json.Unmarshal(body, &todos); err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, err)
+		return
+	}
+
+	if err := todoRepo.SaveMany(todos); err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, todos)
 }
