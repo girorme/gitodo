@@ -1,0 +1,12 @@
+version: "3.7"
+services:
+  core:
+    container_name: gitodo
+    image: hot-reloading-app
+    build: .
+    ports:
+      - 8080:8080
+    volumes:
+      - ./:/app
+    environment: 
+      PORT: "8080"

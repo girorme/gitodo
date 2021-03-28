@@ -28,8 +28,11 @@ func init() {
 func main() {
 	r := gin.Default()
 	r.Use(static.Serve("/", static.LocalFile("./static", false)))
-	r.GET("/todos", getTodos)
-	r.POST("/todos", saveTodos)
+
+	api := r.Group("/api")
+	api.POST("/todos", saveTodos)
+	api.GET("/todos", getTodos)
+
 	r.Run()
 }
 

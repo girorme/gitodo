@@ -1,7 +1,7 @@
 const todoStorage = {
   save: function (todos) {
     axios
-      .post("/todos", todos)
+      .post("/api/todos", todos)
       .then(r => console.log(r))
       .catch(err => console.log(`Error saving todos ${err}`))
   }
@@ -33,7 +33,7 @@ var app = new Vue({
   },
   mounted() {
     axios
-      .get('/todos')
+      .get('/api/todos')
       .then(response => (this.todos = response.data))
   },
   // watch todos change for localStorage persistence
