@@ -26,13 +26,7 @@ func (t Todo) GetAll() (todos domain.Todos) {
 
 // SaveMany Saves batch of todos
 func (t Todo) SaveMany(todos domain.Todos) (rowsAffected int, err error) {
-	var idTodos []uint
-
-	for _, todo := range todos {
-		idTodos = append(idTodos, todo.ID)
-	}
-
-	t.Db.Where("id IN ?", idTodos).Delete(domain.Todo{})
+	t.Db.Exec("DELETE FROM todos")
 	res := t.Db.Create(todos)
 
 	return int(res.RowsAffected), res.Error
