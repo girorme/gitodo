@@ -1,5 +1,11 @@
 const todoStorage = {
   save: function (todos) {
+    if (!todos.length) {
+      return
+    }
+
+    console.info("Saving todos")
+
     axios
       .post("/api/todos", todos)
       .then(r => console.log(r))

@@ -4,7 +4,6 @@ import (
 	"gitodo/domain"
 
 	"gorm.io/gorm"
-	"gorm.io/gorm/clause"
 )
 
 // Todo repository communicates with database
@@ -13,24 +12,42 @@ type Todo struct {
 }
 
 // NewTodo create and return created row
-func (t Todo) NewTodo(title string) domain.Todo {
-	todo := domain.Todo{Title: title}
+func (t Todo) NewTodo(title string) (todo domain.Todo) {
+	todo = domain.Todo{Title: title}
 	t.Db.Create(&todo)
 	return todo
 }
 
 // GetAll return all todos from database
-func (t Todo) GetAll() domain.Todos {
-	var todos domain.Todos
+func (t Todo) GetAll() (todos domain.Todos) {
 	t.Db.Find(&todos)
 	return todos
 }
 
 // SaveMany Saves batch of todos
-func (t Todo) SaveMany(todos domain.Todos) error {
-	result := t.Db.Clauses(clause.OnConflict{
-		UpdateAll: true,
-	}).Create(todos)
+func (t Todo) SaveMany(todos domain.Todos) (rowsAffected int, err error) {
+	var idTodos []uint
 
-	return result.Error
+	for _, todo := range todos {
+		idTodos = append(idTodos, todo.ID)
+	}
+
+	t.Db.Where("id IN ?", idTodos).Delete(domain.Todo{})
+	res := t.Db.Create(todos)
+
+	return int(res.RowsAffected), res.Error
+}
+
+func (t Todo) First() (todo domain.Todo, err error) {
+	res := t.Db.First(&todo)
+	return todo, res.Error
+}
+
+func (t Todo) GetOnly(qtd int) (todos domain.Todos, err error) {
+	if qtd < 1 {
+		qtd = 1
+	}
+
+	res := t.Db.Limit(qtd).Find(&todos)
+	return todos, res.Error
 }

@@ -1,11 +1,13 @@
 Gitodo
 ===
 
-Run locally
+#### Run locally
 ```
 $ docker-compose up
 ```
 
-todo
+Access: http://localhost:8080/
+
+#### Todo
 - Stylish
 - Add ws (https://github.com/olahol/melody)

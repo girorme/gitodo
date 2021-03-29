@@ -27,6 +27,7 @@ func init() {
 
 func main() {
 	r := gin.Default()
+	r.Use(gin.Recovery())
 	r.Use(static.Serve("/", static.LocalFile("./static", false)))
 
 	api := r.Group("/api")
@@ -55,7 +56,7 @@ func saveTodos(c *gin.Context) {
 		return
 	}
 
-	if err := todoRepo.SaveMany(todos); err != nil {
+	if _, err := todoRepo.SaveMany(todos); err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, err)
 		return
 	}
