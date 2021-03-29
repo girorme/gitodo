@@ -1,15 +1,9 @@
 const todoStorage = {
   save: function (todos) {
-    if (!todos.length) {
-      return
-    }
-
-    console.info("Saving todos")
-
     axios
       .post("/api/todos", todos)
       .then(r => toastr.info(`Todos saved... Total: ${todos.length}`))
-      .catch(err => toastr.error(`Error saving todos ${err}`))
+      .catch(err => toastr.error(err))
   }
 };
 
