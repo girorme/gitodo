@@ -8,6 +8,9 @@ $ docker-compose up
 
 Access: http://localhost:8080/
 
+### Usage
+![usage](gitodo.gif)
+
+
 #### Todo
-- Stylish
-- Add ws (https://github.com/olahol/melody)
+- Improve stylish
