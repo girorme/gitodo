@@ -8,8 +8,8 @@ const todoStorage = {
 
     axios
       .post("/api/todos", todos)
-      .then(r => console.log(r))
-      .catch(err => console.log(`Error saving todos ${err}`))
+      .then(r => toastr.info(`Todos saved... Total: ${todos.length}`))
+      .catch(err => toastr.error(`Error saving todos ${err}`))
   }
 };
 
