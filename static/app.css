@@ -347,3 +347,8 @@ html .clear-completed:active {
 .clear-completed:hover {
   color: #000;
 }
+
+#creation-date {
+  font-size: 50%;
+  color: #999;
+}
