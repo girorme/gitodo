@@ -13,4 +13,4 @@ Access: http://localhost:8080/
 
 
 #### Todo
-- Improve stylish
+- Add wails
